@@ -1,5 +1,10 @@
 import Logger from "bunyan";
 import http from "http";
+import cors from "cors";
+import { createClient } from "redis";
+import { createAdapter } from "@socket.io/redis-adapter";
+import "express-async-errors";
+import { Server as SocketServer } from "socket.io";
 
 import {
   Application,
@@ -32,10 +37,26 @@ export class Server {
 
     try {
       const httpServer: http.Server = new http.Server(app);
+      const socketIO: SocketServer = await this.createSocketIO(httpServer);
       this.startHttpServer(httpServer);
+      this.socketIOConnections(socketIO);
     } catch (error) {
       log.error(error);
     }
+  }
+
+  private async createSocketIO(httpServer: http.Server): Promise<SocketServer> {
+    const io: SocketServer = new SocketServer(httpServer, {
+      cors: {
+        origin: config.CLIENT_URL,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      },
+    });
+    const pubClient = createClient({ url: config.REDIS_HOST });
+    const subClient = pubClient.duplicate();
+    await Promise.all([pubClient.connect(), subClient.connect()]);
+    io.adapter(createAdapter(pubClient, subClient));
+    return io;
   }
 
   private startHttpServer(httpServer: http.Server): void {
@@ -44,5 +65,9 @@ export class Server {
     httpServer.listen(SERVER_PORT, () => {
       log.info(`Server running on port ${SERVER_PORT}`);
     });
+  }
+
+  private socketIOConnections(io: SocketServer): void {
+    //TODO: Implement socket io connections here
   }
 }
