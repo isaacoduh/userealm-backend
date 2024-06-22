@@ -10,7 +10,7 @@ export default () => {
     mongoose
       .connect(`${config.DATABASE_URL}`)
       .then(() => {
-        log.info("Database connected successfully!");
+        log.info(`Database connected successfully!`);
         redisConnection.connect();
       })
       .catch((error) => {
