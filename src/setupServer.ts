@@ -5,7 +5,7 @@ import { createClient } from "redis";
 import { createAdapter } from "@socket.io/redis-adapter";
 import "express-async-errors";
 import { Server as SocketServer } from "socket.io";
-
+import cookieSession from "cookie-session";
 import {
   Application,
   json,
@@ -28,6 +28,19 @@ export class Server {
 
   public start(): void {
     this.startServer(this.app);
+  }
+
+  private securityMiddleware(app: Application): void {
+    app.set("trust proxy", 1);
+    app.use(
+      cookieSession({
+        name: "session",
+        keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
+        maxAge: 24 * 7 * 3600000,
+        secure: config.NODE_ENV !== "development",
+        // sameSite: 'none' //comment when running locally
+      })
+    );
   }
 
   private async startServer(app: Application): Promise<void> {
