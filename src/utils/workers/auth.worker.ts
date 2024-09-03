@@ -1,7 +1,7 @@
 import { DoneCallback, Job } from "bull";
 import Logger from "bunyan";
-import { config } from "src/config";
-import { authService } from "src/features/auth/services/auth.service";
+import { config } from "../../config";
+import { authService } from "../../features/auth/services/auth.service";
 
 const log: Logger = config.createLogger("authWorker");
 

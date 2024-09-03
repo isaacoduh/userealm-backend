@@ -23,5 +23,13 @@
       { "transform": "typescript-transform-paths" },
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
+    // "paths": {
+    //   "@auth/*": ["src/features/auth/*"],
+    //   "@user/*": ["src/features/user/*"],
+    //   "@global/*": ["src/shared/globals/*"],
+    //   "@service/*": ["src/shared/services/*"],
+    //   "@worker/*": ["src/utils/workers/*"],
+    //   "@root/*": ["src/*"]
+    // }
   }
 }

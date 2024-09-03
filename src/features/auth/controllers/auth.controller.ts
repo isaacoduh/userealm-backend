@@ -1,3 +1,4 @@
+import { userService } from "./../../user/services/user.service";
 import HTTP_STATUS from "http-status-codes";
 import { userQueue } from "./../../../utils/queues/user.queue";
 import { authQueue } from "./../../../utils/queues/auth.queue";
@@ -9,12 +10,13 @@ import { authService } from "./../services/auth.service";
 import { IAuthDocument, ISignUpData } from "./../interfaces/auth.interface";
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { joiValidation } from "src/shared/globals/decorators/joi-validation.decorator";
+import { joiValidation } from "../../../shared/globals/decorators/joi-validation.decorator";
 import { signupSchema } from "../schemas/signup";
 import { UploadApiResponse } from "cloudinary";
-import { uploads } from "src/shared/globals/helpers/cloudinary-upload";
+import { uploads } from "../../../shared/globals/helpers/cloudinary-upload";
 import JWT from "jsonwebtoken";
-import { config } from "src/config";
+import { config } from "../../../config";
+import { loginSchema } from "../schemas/signin";
 
 const userCache: UserCache = new UserCache();
 
@@ -76,6 +78,78 @@ export class AuthController {
       user: userDataForCache,
       token: userJwt,
     });
+  }
+
+  @joiValidation(loginSchema)
+  public async read(req: Request, res: Response): Promise<void> {
+    const { username, password } = req.body;
+    const existingUser: IAuthDocument = await authService.getAuthUserByUsername(
+      username
+    );
+    if (!existingUser) {
+      throw new BadRequestError(`Invalid credentials`);
+    }
+
+    const passwordsMatch: boolean = await existingUser.comparePassword(
+      password
+    );
+    if (!passwordsMatch) {
+      throw new BadRequestError("Invalid credentials");
+    }
+
+    const user: IUserDocument = await userService.getUserByAuthId(
+      `${existingUser._id}`
+    );
+    const userJwt: string = JWT.sign(
+      {
+        userId: user._id,
+        uId: existingUser.uId,
+        email: existingUser.email,
+        username: existingUser.username,
+        avatarColor: existingUser.avatarColor,
+      },
+      config.JWT_TOKEN!
+    );
+    req.session = { jwt: userJwt };
+    const userDocment: IUserDocument = {
+      ...user,
+      authId: existingUser!._id,
+      username: existingUser!.username,
+      email: existingUser!.email,
+      avatarColor: existingUser!.avatarColor,
+      uId: existingUser!.uId,
+      createdAt: existingUser!.createdAt,
+    } as IUserDocument;
+    res.status(HTTP_STATUS.OK).json({
+      message: "User login successful",
+      user: userDocment,
+      token: userJwt,
+    });
+  }
+
+  public async readCurrentUser(req: Request, res: Response): Promise<void> {
+    let isUser = false;
+    let token = null;
+    let user = null;
+    const cachedUser: IUserDocument = (await userCache.getUserFromCache(
+      `${req.currentUser!.userId}`
+    )) as IUserDocument;
+    const existingUser: IUserDocument = cachedUser
+      ? cachedUser
+      : await userService.getUserById(`${req.currentUser!.userId}`);
+    if (Object.keys(existingUser).length) {
+      isUser = true;
+      token = req.session?.jwt;
+      user = existingUser;
+    }
+    res.status(HTTP_STATUS.OK).json({ token, isUser, user });
+  }
+
+  public async signout(req: Request, res: Response): Promise<void> {
+    req.session = null;
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ message: "Logout successful", user: {}, token: "" });
   }
 
   private signToken(data: IAuthDocument, userObjectId: ObjectId): string {

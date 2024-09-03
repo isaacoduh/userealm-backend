@@ -21,7 +21,10 @@ export function uploads(
         error: UploadApiErrorResponse | undefined,
         result: UploadApiResponse | undefined
       ) => {
-        if (error) resolve(error);
+        if (error) {
+          console.log(error);
+          resolve(error);
+        }
         resolve(result);
       }
     );

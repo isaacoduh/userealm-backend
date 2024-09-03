@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:5600
+@urlPath = api/v1
+
+###
+GET {{baseUrl}}/{{urlPath}}/roost

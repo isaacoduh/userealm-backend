@@ -1,0 +1,29 @@
+import { authRoutes } from "./features/auth/routes/auth.routes";
+import { authMiddleware } from "./shared/globals/helpers/auth-middleware";
+import { Application, Request, Response } from "express";
+import { serverAdapter } from "./utils/queues/base.queue";
+
+const BASE_PATH = "/api/v1";
+
+export default (app: Application) => {
+  const routes = () => {
+    // app.use("/queues", serverAdapter.getRouter());
+    // health routes
+    // env route
+    // instance route
+    // fiboRoutes
+
+    app.get("/api/v1/roost", (_req: Request, res: Response) => {
+      return res.json({ message: "roost endpoint!" });
+    });
+
+    app.use(BASE_PATH, authRoutes.routes());
+    // app.use(
+    //   BASE_PATH,
+    //   authMiddleware.verifyUser,
+    //   authRoutes.currentUserRoute()
+    // );
+  };
+
+  routes();
+};

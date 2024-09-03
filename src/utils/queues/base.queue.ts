@@ -5,12 +5,12 @@ import {
   createBullBoard,
   BullAdapter,
 } from "@bull-board/express";
-import { config } from "src/config";
-import { IAuthJob } from "src/features/auth/interfaces/auth.interface";
+import { config } from "../../config";
+import { IAuthJob } from "../../features/auth/interfaces/auth.interface";
 import {
   IUserJob,
   IEmailJob,
-} from "src/features/user/interfaces/user.interface";
+} from "../../features/user/interfaces/user.interface";
 
 type IBaseJobData = IAuthJob | IEmailJob | IUserJob;
 
