@@ -15,6 +15,26 @@ class UserRoutes {
       authMiddleware.checkAuthentication,
       UserController.prototype.all
     );
+    this.router.get(
+      "/user/profile",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.profile
+    );
+    this.router.get(
+      "/user/profile/:userId",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.profileByUserId
+    );
+    this.router.get(
+      "/user/profile/user/suggestions",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.randomUserSuggestions
+    );
+    this.router.get(
+      "/user/profile/search/:query",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.searchUser
+    );
 
     return this.router;
   }

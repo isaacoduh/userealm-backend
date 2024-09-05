@@ -13,11 +13,11 @@ API Features
     - build out a seeder file for users [done]
     - seed about 100 users [done]
     - get all users (pagination) [done]
-    - get user profile
-    - get user profile with userId
-    - get user profile and posts
-    - get user profile random user suggesstions
-    - get a user via search query
+    - get user profile [done]
+    - get user profile with userId [done]
+    - get user profile and posts [blocked]
+    - get user profile random user suggesstions [done]
+    - get a user via search query [done]
     - update user password (change password)
     - update basic info
     - update social links
@@ -34,6 +34,7 @@ API Features
     - update a post with images
     - update a post with video
     - delete a post
+    - get a user with their posts [users controller]
 
 - checkpoint:
     - deploy to digital ocean
@@ -55,6 +56,7 @@ API Features
 
 - followers
     - return all followers of a user in the 'all users route'
+    - add followers service to get  random users in users service 
 
 - checkpoint:
     - deploy to aws via terraform

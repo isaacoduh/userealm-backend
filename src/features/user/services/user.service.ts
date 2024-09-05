@@ -98,6 +98,63 @@ class UserService {
     return users;
   }
 
+  public async getRandomUsers(userId: string): Promise<IUserDocument[]> {
+    const randomUsers: IUserDocument[] = [];
+    const users: IUserDocument[] = await UserModel.aggregate([
+      { $match: { _id: { $ne: new mongoose.Types.ObjectId(userId) } } },
+      {
+        $lookup: {
+          from: "Auth",
+          localField: "authId",
+          foreignField: "_id",
+          as: "authId",
+        },
+      },
+      { $unwind: "$authId" },
+      { $sample: { size: 10 } },
+      {
+        $addFields: {
+          username: "$authId.username",
+          email: "$authId.email",
+          avatarColor: "$authId.avatarColor",
+          uId: "$authId.uId",
+          createdAt: "$authId.createdAt",
+        },
+      },
+      {
+        $project: { authId: 0, __v: 0 },
+      },
+    ]);
+
+    // follower service
+    return users;
+  }
+
+  public async searchUsers(regex: RegExp): Promise<ISearchUser[]> {
+    const users = await AuthModel.aggregate([
+      { $match: { username: regex } },
+      {
+        $lookup: {
+          from: "User",
+          localField: "_id",
+          foreignField: "authId",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          _id: "$user._id",
+          username: 1,
+          email: 1,
+          avatarColor: 1,
+          profilePicture: 1,
+        },
+      },
+    ]);
+    return users;
+  }
+
   public async getTotalUsersInDB(): Promise<number> {
     const totalCount: number = await UserModel.find({}).countDocuments();
     return totalCount;
