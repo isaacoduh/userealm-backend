@@ -36,6 +36,12 @@ class UserRoutes {
       UserController.prototype.searchUser
     );
 
+    this.router.put(
+      "/user/profile/change-password",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.passwordUpdate
+    );
+
     return this.router;
   }
 }
