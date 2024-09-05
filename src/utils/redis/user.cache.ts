@@ -123,4 +123,65 @@ export class UserCache extends BaseCache {
       throw new ServerError("Server error. try again!");
     }
   }
+
+  public async getUsersFromCache(
+    start: number,
+    end: number,
+    excludedUserKey: string
+  ): Promise<IUserDocument[]> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+
+      const response: string[] = await this.client.ZRANGE("user", start, end, {
+        REV: true,
+      });
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      for (const key of response) {
+        if (key !== excludedUserKey) {
+          multi.HGETALL(`users:${key}`);
+        }
+      }
+
+      const replies: UserCacheMultiType =
+        (await multi.exec()) as UserCacheMultiType;
+      const userReplies: IUserDocument[] = [];
+      for (const reply of replies as IUserDocument[]) {
+        reply.createdAt = new Date(Helpers.parseJson(`${reply.createdAt}`));
+        reply.postsCount = Helpers.parseJson(`${reply.postsCount}`);
+        reply.blocked = Helpers.parseJson(`${reply.blocked}`);
+        reply.blockedBy = Helpers.parseJson(`${reply.blockedBy}`);
+        reply.notifications = Helpers.parseJson(`${reply.notifications}`);
+        reply.social = Helpers.parseJson(`${reply.social}`);
+        reply.followersCount = Helpers.parseJson(`${reply.followersCount}`);
+        reply.followingCount = Helpers.parseJson(`${reply.followingCount}`);
+        reply.bgImageId = Helpers.parseJson(`${reply.bgImageId}`);
+        reply.bgImageVersion = Helpers.parseJson(`${reply.bgImageVersion}`);
+        reply.profilePicture = Helpers.parseJson(`${reply.profilePicture}`);
+        reply.work = Helpers.parseJson(`${reply.work}`);
+        reply.school = Helpers.parseJson(`${reply.school}`);
+        reply.location = Helpers.parseJson(`${reply.location}`);
+        reply.quote = Helpers.parseJson(`${reply.quote}`);
+        userReplies.push(reply);
+      }
+      return userReplies;
+    } catch (error) {
+      log.error(error);
+      throw new ServerError("Server error. Try again!");
+    }
+  }
+
+  public async getTotalUsersInCache(): Promise<number> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      const count: number = await this.client.ZCARD("user");
+      return count;
+    } catch (error) {
+      log.error(error);
+      throw new ServerError("Server Error. Try again!");
+    }
+  }
 }
