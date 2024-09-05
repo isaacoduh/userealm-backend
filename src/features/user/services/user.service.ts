@@ -39,6 +39,28 @@ class UserService {
     ).exec();
   }
 
+  public async updateSocialLinks(
+    userId: string,
+    links: ISocialLinks
+  ): Promise<void> {
+    await UserModel.updateOne(
+      { _id: userId },
+      {
+        $set: { social: links },
+      }
+    ).exec();
+  }
+
+  public async updateNotificationSettings(
+    userId: string,
+    settings: INotificationSettings
+  ): Promise<void> {
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { notifications: settings } }
+    ).exec();
+  }
+
   public async getUserById(userId: string): Promise<IUserDocument> {
     const users: IUserDocument[] = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },

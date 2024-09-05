@@ -19,9 +19,9 @@ API Features
     - get user profile random user suggesstions [done]
     - get a user via search query [done]
     - update user password (change password) [done]
-    - update basic info
-    - update social links
-    - update settings
+    - update basic info [done]
+    - update social links [done]
+    - update settings [done]
 
 - post
     - get all posts (pagination)

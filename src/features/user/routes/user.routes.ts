@@ -41,6 +41,21 @@ class UserRoutes {
       authMiddleware.checkAuthentication,
       UserController.prototype.passwordUpdate
     );
+    this.router.put(
+      "/user/profile/basic-info",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.updateBasicInfo
+    );
+    this.router.put(
+      "/user/profile/social-links",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.updateSocialLinks
+    );
+    this.router.put(
+      "/user/profile/settings",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.updateNotificationSettings
+    );
 
     return this.router;
   }

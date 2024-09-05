@@ -1,3 +1,4 @@
+import { userQueue } from "./../../../utils/queues/user.queue";
 import { emailQueue } from "./../../../utils/queues/email.queue";
 import { resetPasswordTemplate } from "./../../../shared/services/emails/templates/reset-password/reset-password-template";
 import { authService } from "./../../auth/services/auth.service";
@@ -15,7 +16,12 @@ import {
 import { Request, Response } from "express";
 import { userService } from "../services/user.service";
 import { joiValidation } from "./../../../shared/globals/decorators/joi-validation.decorator";
-import { changePasswordSchema } from "../schemas/info";
+import {
+  basicInfoSchema,
+  changePasswordSchema,
+  notificationSettingsSchema,
+  socialLinksSchema,
+} from "../schemas/info";
 
 import moment from "moment";
 import publicIP from "ip";
@@ -148,6 +154,63 @@ export class UserController {
         "Password updated successfully. You will be redirected to login again!",
     });
   }
+
+  @joiValidation(basicInfoSchema)
+  public async updateBasicInfo(req: Request, res: Response): Promise<void> {
+    for (const [key, value] of Object.entries(req.body)) {
+      await userCache.updateSingleUserItemInCache(
+        `${req.currentUser!.userId}`,
+        key,
+        `${value}`
+      );
+    }
+
+    userQueue.addUserJob("updateBasicInfoInDB", {
+      key: `${req.currentUser!.userId}`,
+      value: req.body,
+    });
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ message: "Updated Basic Info Successfully" });
+  }
+
+  @joiValidation(socialLinksSchema)
+  public async updateSocialLinks(req: Request, res: Response): Promise<void> {
+    await userCache.updateSingleUserItemInCache(
+      `${req.currentUser!.userId}`,
+      "social",
+      req.body
+    );
+    userQueue.addUserJob("updateSocialLinksInDB", {
+      key: `${req.currentUser!.userId}`,
+      value: req.body,
+    });
+    res.status(HTTP_STATUS.OK).json({ message: "Update Successfully" });
+  }
+
+  @joiValidation(notificationSettingsSchema)
+  public async updateNotificationSettings(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    await userCache.updateSingleUserItemInCache(
+      `${req.currentUser!.userId}`,
+      "notifications",
+      req.body
+    );
+    userQueue.addUserJob("updateNotificationSettings", {
+      key: `${req.currentUser!.userId}`,
+      value: req.body,
+    });
+
+    res
+      .status(HTTP_STATUS.OK)
+      .json({
+        message: "Notification settings updated successfully",
+        settings: req.body,
+      });
+  }
+
   private async allUsers({
     newSkip,
     limit,
