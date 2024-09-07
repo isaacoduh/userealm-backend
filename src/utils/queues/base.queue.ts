@@ -1,3 +1,4 @@
+import { IPostJobData } from "./../../features/post/interfaces/post.interface";
 import Queue, { Job } from "bull";
 import Logger from "bunyan";
 import {
@@ -12,7 +13,7 @@ import {
   IEmailJob,
 } from "../../features/user/interfaces/user.interface";
 
-type IBaseJobData = IAuthJob | IEmailJob | IUserJob;
+type IBaseJobData = IAuthJob | IEmailJob | IUserJob | IPostJobData;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;

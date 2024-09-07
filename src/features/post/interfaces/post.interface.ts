@@ -8,7 +8,7 @@ export interface IPostDocument extends Document {
   username: string;
   email: string;
   avatarColor: string;
-  profileProfile: string;
+  profilePicture: string;
   post: string;
   bgColor: string;
   commentsCount: number;
