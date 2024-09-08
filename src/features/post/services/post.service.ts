@@ -22,7 +22,7 @@ class PostService {
     await Promise.all([post, user]);
   }
 
-  public async getPost(
+  public async getPosts(
     query: IGetPostQuery,
     skip = 0,
     limit = 0,

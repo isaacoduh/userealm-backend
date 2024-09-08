@@ -3,6 +3,7 @@ import { authMiddleware } from "./shared/globals/helpers/auth-middleware";
 import { Application, Request, Response } from "express";
 import { serverAdapter } from "./utils/queues/base.queue";
 import { userRoutes } from "./features/user/routes/user.routes";
+import { postRoutes } from "./features/post/routes/post.routes";
 
 const BASE_PATH = "/api/v1";
 
@@ -20,6 +21,7 @@ export default (app: Application) => {
 
     app.use(BASE_PATH, authRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, userRoutes.routes());
+    app.use(BASE_PATH, authMiddleware.verifyUser, postRoutes.routes());
     // app.use(
     //   BASE_PATH,
     //   authMiddleware.verifyUser,

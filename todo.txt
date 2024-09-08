@@ -24,16 +24,16 @@ API Features
     - update settings [done]
 
 - post
-    - get all posts (pagination)
-    - get all post with images
-    - get all posts with video
-    - create a post
-    - create a post with images
-    - create a post with video content
-    - update a post
-    - update a post with images
-    - update a post with video
-    - delete a post
+    - get all posts (pagination) [done]
+    - get all post with images [done]
+    - get all posts with video [done]
+    - create a post [done]
+    - create a post with images [done]
+    - create a post with video content [done]
+    - update a post [done]
+    - update a post with images [done]
+    - update a post with video [done]
+    - delete a post [done]
     - get a user with their posts [users controller]
 
 - checkpoint:
@@ -64,10 +64,16 @@ API Features
 
 - notifications
 - images
+    - image queues [add queues]
+   - imageQueue.addImageJob("addImageToDB",
 - chat
+- socketio
+    - socketIOPostObject.emit('add post', createdPost);
+    - socketIOPostObject.emit('update post', postUpdated, 'posts');
 - social payments
 - wallets
 
 - unit tests:
     - auth unit tests
     - user unit tests
+    - post [create, delete, get, update]
