@@ -34,7 +34,7 @@ API Features
     - update a post with images [done]
     - update a post with video [done]
     - delete a post [done]
-    - get a user with their posts [users controller]
+    - get a user with their posts [users controller] [done]
 
 - checkpoint:
     - deploy to digital ocean
