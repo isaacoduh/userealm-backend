@@ -1,3 +1,6 @@
+import { postService } from "./../../post/services/post.service";
+import { PostCache } from "./../../../utils/redis/post.cache";
+import { IPostDocument } from "./../../post/interfaces/post.interface";
 import { userQueue } from "./../../../utils/queues/user.queue";
 import { emailQueue } from "./../../../utils/queues/email.queue";
 import { resetPasswordTemplate } from "./../../../shared/services/emails/templates/reset-password/reset-password-template";
@@ -36,6 +39,7 @@ interface IUserAll {
 }
 
 const userCache: UserCache = new UserCache();
+const postCache: PostCache = new PostCache();
 
 export class UserController {
   public async all(req: Request, res: Response): Promise<void> {
@@ -81,6 +85,32 @@ export class UserController {
     res
       .status(HTTP_STATUS.OK)
       .json({ message: "User Retrieved by Profile ID", user: existingUser });
+  }
+
+  public async profileAndPosts(req: Request, res: Response): Promise<void> {
+    const { userId, username, uId } = req.params;
+    const userName: string = Helpers.firstLetterUppercase(username);
+    const cachedUser: IUserDocument = (await userCache.getUserFromCache(
+      userId
+    )) as IUserDocument;
+    const cachedUserPosts: IPostDocument[] =
+      await postCache.getUserPostsFromCache("post", parseInt(uId, 10));
+
+    const existingUser: IUserDocument = cachedUser
+      ? cachedUser
+      : await userService.getUserById(userId);
+    const userPosts: IPostDocument[] = cachedUserPosts.length
+      ? cachedUserPosts
+      : await postService.getPosts({ username: userName }, 0, 100, {
+          createdAt: -1,
+        });
+    res
+      .status(HTTP_STATUS.OK)
+      .json({
+        message: "User profile and post retrieved!",
+        user: existingUser,
+        posts: userPosts,
+      });
   }
 
   public async randomUserSuggestions(
@@ -203,12 +233,10 @@ export class UserController {
       value: req.body,
     });
 
-    res
-      .status(HTTP_STATUS.OK)
-      .json({
-        message: "Notification settings updated successfully",
-        settings: req.body,
-      });
+    res.status(HTTP_STATUS.OK).json({
+      message: "Notification settings updated successfully",
+      settings: req.body,
+    });
   }
 
   private async allUsers({

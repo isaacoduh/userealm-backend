@@ -26,6 +26,11 @@ class UserRoutes {
       UserController.prototype.profileByUserId
     );
     this.router.get(
+      "/user/profile/posts/:username/:userId/:uId",
+      authMiddleware.checkAuthentication,
+      UserController.prototype.profileAndPosts
+    );
+    this.router.get(
       "/user/profile/user/suggestions",
       authMiddleware.checkAuthentication,
       UserController.prototype.randomUserSuggestions
