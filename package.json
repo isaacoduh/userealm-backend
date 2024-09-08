@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npm run build && NODE_ENV=production node --max-old-space-size=4096 ./node_modules/.bin/pm2 start ./build/src/app.js -i 5 --attach --watch | ./node_modules/.bin/bunyan",
+    "tstart": "npm run build && NODE_ENV=production start ./build/src/app.js -i 5 --attach --watch | ./node_modules/.bin/bunyan",
+    "start": "nodemon src/app.ts | ./node_modules/.bin/bunyan",
     "dev": "nodemon src/app.ts | ./node_modules/.bin/bunyan",
     "devdd": "nodemon -r tsconfig-paths/register src/app.ts | ./node_modules/.bin/bunyan",
     "test": "echo \"Error: no test specified\" && exit 1",
