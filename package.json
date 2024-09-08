@@ -4,12 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=production pm2 start ./build/src/app.js -i 5 --attach --watch | ./node_modules/.bin/bunyan",
+    "start": "build && NODE_ENV=production pm2 start ./build/src/app.js -i 5 --attach --watch | ./node_modules/.bin/bunyan",
     "dev": "nodemon src/app.ts | ./node_modules/.bin/bunyan",
     "devdd": "nodemon -r tsconfig-paths/register src/app.ts | ./node_modules/.bin/bunyan",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seeds:dev": "npx ts-node src/seeds.ts",
-    "seeds:prod": "npx ts-node ./build/src/seeds.js"
+    "seeds:prod": "npx ts-node ./build/src/seeds.js",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
   },
   "keywords": [],
   "author": "",
