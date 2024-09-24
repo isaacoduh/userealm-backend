@@ -1,3 +1,4 @@
+import { ICommentJob } from "./../../features/comments/interfaces/comment.interface";
 import { IPostJobData } from "./../../features/post/interfaces/post.interface";
 import Queue, { Job } from "bull";
 import Logger from "bunyan";
@@ -13,7 +14,25 @@ import {
   IEmailJob,
 } from "../../features/user/interfaces/user.interface";
 
-type IBaseJobData = IAuthJob | IEmailJob | IUserJob | IPostJobData;
+// type IBaseJobData =
+// | IAuthJob
+// | IEmailJob
+// | IPostJobData
+// | IReactionJob
+// | ICommentJob
+// | IFollowerJobData
+// | IBlockedUserJobData
+// | INotificationJobData
+// | IFileImageJobData
+// | IChatJobData
+// | IMessageData
+// | IUserJob;
+type IBaseJobData =
+  | IAuthJob
+  | IEmailJob
+  | IUserJob
+  | IPostJobData
+  | ICommentJob;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;

@@ -1,3 +1,4 @@
+import { commentRoutes } from "./features/comments/routes/comment.routes";
 import { authRoutes } from "./features/auth/routes/auth.routes";
 import { authMiddleware } from "./shared/globals/helpers/auth-middleware";
 import { Application, Request, Response } from "express";
@@ -22,6 +23,7 @@ export default (app: Application) => {
     app.use(BASE_PATH, authRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, userRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, postRoutes.routes());
+    app.use(BASE_PATH, authMiddleware.verifyUser, commentRoutes.routes());
     // app.use(
     //   BASE_PATH,
     //   authMiddleware.verifyUser,

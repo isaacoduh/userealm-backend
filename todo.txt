@@ -35,24 +35,21 @@ API Features
     - update a post with video [done]
     - delete a post [done]
     - get a user with their posts [users controller] [done]
-
-- checkpoint:
-    - deploy to digital ocean
-    - create a cloud mongo db
-
-
+- comments
+    - interfaces [done]
+    - model [done]
+    - schemes [done]
+    - queues [done]
+    - cache [done]
+    - services [done]
+    - workers [done]
+    - controllers []
+    - extra stuff:
+        - 
 - reactions
 
-- checkpoint:
-    - react frontend setup
-    - build authentication features
-    - build profile features
 
-- comments
 
-- checkpoint
-    - build post feature
-    - deploy frontend
 
 - followers
     - return all followers of a user in the 'all users route'
@@ -62,11 +59,26 @@ API Features
     - deploy to aws via terraform
     - setup circle ci pipeline
 
-- notifications
+
+- checkpoint:
+    - deploy to digital ocean
+    - create a cloud mongo db
+
+- checkpoint:
+    - react frontend setup
+    - build authentication features
+    - build profile features
+- checkpoint
+    - build post feature [frontend]
+    - deploy frontend
+
+
 - images
     - image queues [add queues]
    - imageQueue.addImageJob("addImageToDB",
 - chat
+- notifications:
+    - add notification to comment service, email queue
 - socketio
     - socketIOPostObject.emit('add post', createdPost);
     - socketIOPostObject.emit('update post', postUpdated, 'posts');
