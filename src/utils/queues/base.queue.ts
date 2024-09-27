@@ -1,3 +1,4 @@
+import { IReactionJob } from "./../../features/reactions/interfaces/reaction.interface";
 import { ICommentJob } from "./../../features/comments/interfaces/comment.interface";
 import { IPostJobData } from "./../../features/post/interfaces/post.interface";
 import Queue, { Job } from "bull";
@@ -32,7 +33,8 @@ type IBaseJobData =
   | IEmailJob
   | IUserJob
   | IPostJobData
-  | ICommentJob;
+  | ICommentJob
+  | IReactionJob;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;

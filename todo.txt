@@ -47,6 +47,15 @@ API Features
     - extra stuff:
         - 
 - reactions
+    - interfaces [done]
+    - model
+    - schemes
+    - cache
+    - services
+    - workers
+    - queues
+    - controllers 
+    - extra stuff
 
 
 
@@ -79,6 +88,7 @@ API Features
 - chat
 - notifications:
     - add notification to comment service, email queue
+    - add notification to reaction service, email queue
 - socketio
     - socketIOPostObject.emit('add post', createdPost);
     - socketIOPostObject.emit('update post', postUpdated, 'posts');
