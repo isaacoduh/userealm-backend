@@ -61,17 +61,17 @@ API Features
 
 
 - followers
-    - return all followers of a user in the 'all users route'
-    - add followers service to get  random users in users service
-        - interfaces
-        - model
-        - schemes
-        - cache
-        - services
-        - workers
-        - queues
-        - controllers
-        - extra stuff 
+    - return all followers of a user in the 'all users route' [done]
+    - add followers service to get  random users in users service [done]
+        - interfaces [done]
+        - model [done]
+        - schemes [done]
+        - cache [done]
+        - services [done]
+        - workers [done]
+        - queues [done]
+        - controllers [done]
+        - extra stuff [done]
 
 - checkpoint:
     - deploy to aws via terraform
@@ -99,10 +99,17 @@ API Features
     - add notification to comment service, email queue
     - add notification to reaction service, email queue
     - add notification to follower service, email queue
+    - add notification to chat controller add message
 - socketio
     - socketIOPostObject.emit('add post', createdPost);
     - socketIOPostObject.emit('update post', postUpdated, 'posts');
     - socketIOFollowerObject.emit('add follower',addFolloweeData)
+    - postSocketHandler.listen();
+    - followerSocketHandler.listen();
+    - userSocketHandler.listen();
+    - chatSocketHandler.listen();
+    - notificationSocketHandler.listen(io);
+    - imageSocketHandler.listen(io);
 - social payments
 - wallets
 

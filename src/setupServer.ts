@@ -25,6 +25,8 @@ import {
   CustomError,
   IErrorResponse,
 } from "./shared/globals/helpers/error-handler";
+import { SocketIOChatHandler } from "./utils/sockets/chat";
+import { SocketIOUserHandler } from "./utils/sockets/user";
 
 const SERVER_PORT = 5600;
 const log: Logger = config.createLogger("server");
@@ -117,7 +119,7 @@ export class Server {
       const httpServer: http.Server = new http.Server(app);
       const socketIO: SocketServer = await this.createSocketIO(httpServer);
       this.startHttpServer(httpServer);
-      // this.socketIOConnections(socketIO);
+      this.socketIOConnections(socketIO);
     } catch (error) {
       log.error(error);
     }
@@ -147,5 +149,10 @@ export class Server {
 
   private socketIOConnections(io: SocketServer): void {
     //TODO: Implement socket io connections here
+    const chatSocketHandler: SocketIOChatHandler = new SocketIOChatHandler(io);
+    const userSocketHandler: SocketIOUserHandler = new SocketIOUserHandler(io);
+
+    chatSocketHandler.listen();
+    userSocketHandler.listen();
   }
 }

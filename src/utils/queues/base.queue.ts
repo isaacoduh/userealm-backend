@@ -1,3 +1,11 @@
+import {
+  IFollowerJobData,
+  IBlockedUserJobData,
+} from "./../../features/followers/interfaces/follower.interface";
+import {
+  IChatJobData,
+  IMessageData,
+} from "./../../features/chat/interfaces/chat.interface";
 import { IReactionJob } from "./../../features/reactions/interfaces/reaction.interface";
 import { ICommentJob } from "./../../features/comments/interfaces/comment.interface";
 import { IPostJobData } from "./../../features/post/interfaces/post.interface";
@@ -34,7 +42,11 @@ type IBaseJobData =
   | IUserJob
   | IPostJobData
   | ICommentJob
-  | IReactionJob;
+  | IReactionJob
+  | IChatJobData
+  | IFollowerJobData
+  | IBlockedUserJobData
+  | IMessageData;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
