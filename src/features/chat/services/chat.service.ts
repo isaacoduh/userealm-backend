@@ -6,7 +6,6 @@ import { ConversationModel } from "../models/conversation.schema";
 
 class ChatService {
   public async addMessageToDB(data: IMessageData): Promise<void> {
-    console.log("service....", data);
     const conversation: IConversationDocument[] = await ConversationModel.find({
       _id: data?.conversationId,
     }).exec();

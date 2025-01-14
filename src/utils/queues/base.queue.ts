@@ -11,17 +11,16 @@ import { ICommentJob } from "./../../features/comments/interfaces/comment.interf
 import { IPostJobData } from "./../../features/post/interfaces/post.interface";
 import Queue, { Job } from "bull";
 import Logger from "bunyan";
-import {
-  ExpressAdapter,
-  createBullBoard,
-  BullAdapter,
-} from "@bull-board/express";
+import { createBullBoard } from "@bull-board/api";
+import { ExpressAdapter } from "@bull-board/express";
+import { BullAdapter } from "@bull-board/api/bullAdapter";
 import { config } from "../../config";
 import { IAuthJob } from "../../features/auth/interfaces/auth.interface";
 import {
   IUserJob,
   IEmailJob,
 } from "../../features/user/interfaces/user.interface";
+import { IFileImageJobData } from "@image/interfaces/image.interface";
 
 // type IBaseJobData =
 // | IAuthJob
@@ -46,7 +45,8 @@ type IBaseJobData =
   | IChatJobData
   | IFollowerJobData
   | IBlockedUserJobData
-  | IMessageData;
+  | IMessageData
+  | IFileImageJobData;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;

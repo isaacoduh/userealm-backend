@@ -8,6 +8,7 @@ import { postRoutes } from "./features/post/routes/post.routes";
 import { reactionRoutes } from "./features/reactions/routes/reaction.routes";
 import { followerRoutes } from "./features/followers/routes/follower.routes";
 import { chatRoutes } from "./features/chat/routes/chat.routes";
+import { imageRoutes } from "@image/routes/image.routes";
 
 const BASE_PATH = "/api/v1";
 
@@ -30,6 +31,7 @@ export default (app: Application) => {
     app.use(BASE_PATH, authMiddleware.verifyUser, reactionRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, followerRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, chatRoutes.routes());
+    app.use(BASE_PATH, authMiddleware.verifyUser, imageRoutes.routes());
     // app.use(
     //   BASE_PATH,
     //   authMiddleware.verifyUser,
