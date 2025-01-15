@@ -21,6 +21,7 @@ import {
   IEmailJob,
 } from "../../features/user/interfaces/user.interface";
 import { IFileImageJobData } from "@image/interfaces/image.interface";
+import { INotificationJobData } from "@notification/interfaces/notification.interface";
 
 // type IBaseJobData =
 // | IAuthJob
@@ -46,7 +47,8 @@ type IBaseJobData =
   | IFollowerJobData
   | IBlockedUserJobData
   | IMessageData
-  | IFileImageJobData;
+  | IFileImageJobData
+  | INotificationJobData;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
